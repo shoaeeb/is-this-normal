@@ -59,6 +59,7 @@ router.get('/:slug', async (req, res) => {
 // @access  Public
 router.post('/', async (req, res) => {
   try {
+    console.log('Received question submission:', req.body);
     let { text, category } = req.body;
     
     // Format question text
@@ -89,10 +90,11 @@ router.post('/', async (req, res) => {
     });
     
     const question = await newQuestion.save();
+    console.log('Question saved successfully:', question);
     res.json(question);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    console.error('Error saving question:', err);
+    res.status(500).json({ msg: err.message || 'Server Error' });
   }
 });
 
@@ -127,6 +129,32 @@ router.get('/category/:category', async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
+  }
+});
+
+// @route   POST api/questions/byIds
+// @desc    Get questions by array of IDs
+// @access  Public
+router.post('/byIds', async (req, res) => {
+  try {
+    console.log('Received request for questions by IDs:', req.body);
+    const { ids } = req.body;
+    
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.json({ questions: [] });
+    }
+    
+    // Find questions by IDs
+    const questions = await Question.find({
+      _id: { $in: ids },
+      isApproved: true
+    }).sort({ createdAt: -1 });
+    
+    console.log(`Found ${questions.length} questions by IDs`);
+    res.json({ questions });
+  } catch (err) {
+    console.error('Error fetching questions by IDs:', err);
+    res.status(500).json({ msg: err.message || 'Server Error' });
   }
 });
 

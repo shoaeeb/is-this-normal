@@ -10,6 +10,7 @@ const MyQuestions = () => {
   useEffect(() => {
     // Get recently submitted questions from localStorage
     const myQuestionIds = JSON.parse(localStorage.getItem('myQuestions') || '[]');
+    console.log('MyQuestions - IDs from localStorage:', myQuestionIds);
     
     const fetchMyQuestions = async () => {
       if (myQuestionIds.length === 0) {
@@ -18,19 +19,20 @@ const MyQuestions = () => {
       }
       
       try {
-        // Get all questions and filter locally
-        const res = await api.get('/api/questions');
-        const allQuestions = res.data;
+        // Use the new endpoint to get questions by IDs
+        const res = await api.post('/api/questions/byIds', { ids: myQuestionIds });
+        console.log('MyQuestions - API response:', res.data);
         
-        // Filter questions that match the IDs in localStorage
-        const myQuestions = allQuestions.filter(q => 
-          myQuestionIds.includes(q._id)
-        );
-        
-        setQuestions(myQuestions);
-        setLoading(false);
+        if (res.data && res.data.questions) {
+          setQuestions(res.data.questions);
+        } else {
+          console.error('Unexpected API response format:', res.data);
+          setQuestions([]);
+        }
       } catch (err) {
-        console.error(err);
+        console.error('Error fetching my questions:', err);
+        setQuestions([]);
+      } finally {
         setLoading(false);
       }
     };

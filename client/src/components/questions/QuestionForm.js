@@ -38,15 +38,24 @@ const QuestionForm = () => {
     setError('');
     
     try {
+      console.log('Submitting question:', { text: questionText, category });
       const res = await api.post('/api/questions', {
         text: questionText,
         category
       });
+      console.log('Question submission response:', res.data);
       
       // Save question ID to localStorage
       const myQuestions = JSON.parse(localStorage.getItem('myQuestions') || '[]');
-      myQuestions.push(res.data._id);
-      localStorage.setItem('myQuestions', JSON.stringify(myQuestions));
+      const questionId = res.data._id;
+      console.log('Saving question ID to localStorage:', questionId);
+      
+      // Only add if not already in the array
+      if (!myQuestions.includes(questionId)) {
+        myQuestions.push(questionId);
+        localStorage.setItem('myQuestions', JSON.stringify(myQuestions));
+        console.log('Updated myQuestions in localStorage:', myQuestions);
+      }
       
       setSuccess('Your question has been published and is now live!');
       setFormData({ text: '', category: 'other' });
@@ -56,10 +65,11 @@ const QuestionForm = () => {
         navigate('/');
       }, 3000);
     } catch (err) {
+      console.error('Question submission error:', err);
       if (err.response && err.response.data.msg) {
         setError(err.response.data.msg);
       } else {
-        setError('Something went wrong. Please try again.');
+        setError(`Error: ${err.message || 'Something went wrong. Please try again.'}`);
       }
     } finally {
       setIsSubmitting(false);

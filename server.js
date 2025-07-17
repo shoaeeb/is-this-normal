@@ -13,8 +13,30 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
-app.use(helmet());
+
+// Enhanced CORS configuration
+app.use(cors({
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Set security headers but allow inline scripts for Google Analytics
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "script-src": ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com", "https://www.google-analytics.com"],
+      "img-src": ["'self'", "data:", "https://www.google-analytics.com"]
+    }
+  }
+}));
+
+// Log all requests
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
+  next();
+});
 
 // Define routes
 app.use('/api/questions', require('./routes/questions'));
@@ -43,6 +65,22 @@ app.get('/sitemap.xml', async (req, res) => {
   } catch (err) {
     console.error('Sitemap generation error:', err);
     res.status(500).send('Error generating sitemap');
+  }
+});
+
+// Debug endpoint to get all questions (development only)
+app.get('/api/debug/questions', async (req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(403).json({ msg: 'Not available in production' });
+  }
+  
+  try {
+    const Question = require('./models/Question');
+    const questions = await Question.find().sort({ createdAt: -1 });
+    res.json({ questions });
+  } catch (err) {
+    console.error('Debug questions error:', err);
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 

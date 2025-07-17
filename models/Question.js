@@ -49,16 +49,26 @@ QuestionSchema.pre('save', function(next) {
     return next();
   }
   
-  // Create slug from question text
-  this.slug = this.text
-    .toLowerCase()
-    .replace(/[^a-z0-9 ]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/^is-it-normal-to-/, '')
-    .replace(/-+$/, '')
-    .substring(0, 100);
+  try {
+    // Create slug from question text
+    this.slug = this.text
+      .toLowerCase()
+      .replace(/[^a-z0-9 ]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/^is-it-normal-to-/, '')
+      .replace(/-+$/, '')
+      .substring(0, 100);
+      
+    // Add timestamp to ensure uniqueness
+    const timestamp = Date.now().toString().slice(-6);
+    this.slug = `${this.slug}-${timestamp}`;
     
-  next();
+    console.log('Generated slug:', this.slug);
+    next();
+  } catch (err) {
+    console.error('Error generating slug:', err);
+    next(err);
+  }
 });
 
 module.exports = mongoose.model('Question', QuestionSchema);

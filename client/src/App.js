@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/layout/Navbar';
 import { ThemeProvider } from './context/ThemeContext';
 import { initGA, trackPageView } from './utils/analytics';
+import DebugStorage from './components/utils/DebugStorage';
 import Home from './components/pages/Home';
 import QuestionDetail from './components/questions/QuestionDetail';
 import QuestionForm from './components/questions/QuestionForm';
@@ -13,8 +14,8 @@ import MyQuestions from './components/questions/MyQuestions';
 import About from './components/pages/About';
 import NotFound from './components/pages/NotFound';
 
-// Google Analytics tracking ID
-const GA_TRACKING_ID = 'G-XXXXXXXXXX'; // Replace with your actual tracking ID
+// Google Analytics tracking ID from environment variable
+const GA_TRACKING_ID = process.env.REACT_APP_GA_TRACKING_ID || 'G-T5RVXEYJ0C';
 
 // Analytics tracker component
 const AnalyticsTracker = () => {
@@ -51,6 +52,7 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
           </div>
+          {process.env.NODE_ENV !== 'production' && <DebugStorage />}
         </div>
       </Router>
       </ThemeProvider>
