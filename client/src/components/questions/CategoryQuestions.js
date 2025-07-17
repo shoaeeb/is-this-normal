@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import api from '../../utils/api';
 import QuestionItem from './QuestionItem';
 import Pagination from '../layout/Pagination';
+import SEOTags from '../layout/SEOTags';
 
 const CategoryQuestions = () => {
   const { category } = useParams();
@@ -40,8 +41,28 @@ const CategoryQuestions = () => {
     return cat.charAt(0).toUpperCase() + cat.slice(1);
   };
 
+  // Get category description for SEO
+  const getCategoryDescription = (cat) => {
+    const descriptions = {
+      'work': 'Explore questions about work habits, office behavior, and professional relationships.',
+      'relationships': 'Discover what others think about relationship dynamics, dating habits, and couple behaviors.',
+      'social': 'Find out if your social interactions and behaviors are considered normal by others.',
+      'habits': 'Learn whether your personal habits and routines are similar to others.',
+      'health': 'Explore questions about health concerns, body changes, and wellness behaviors.',
+      'family': 'Discover insights about family dynamics, parenting, and household behaviors.',
+      'other': 'Browse miscellaneous questions about behaviors and situations across various aspects of life.'
+    };
+    return descriptions[cat] || `Explore questions about ${formatCategoryName(cat)} and see what others consider normal.`;
+  };
+
   return (
     <div className="category-questions">
+      <SEOTags 
+        title={`${formatCategoryName(category)} Questions`}
+        description={getCategoryDescription(category)}
+        canonicalUrl={window.location.href}
+        keywords={['is this normal', category, 'normal behavior', `${category} behavior`, `${category} habits`, 'social validation']}
+      />
       <Link to="/" className="btn btn-light">
         Back to All Questions
       </Link>

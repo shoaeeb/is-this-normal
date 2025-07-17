@@ -1,9 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import SEOTags from '../layout/SEOTags';
+import SEOTags from '../layout/SEOTags';
 
 const About = () => {
   return (
     <div className="about-page">
+      <SEOTags 
+        title="About Is This Normal?"
+        description="Learn about the Is This Normal? platform where you can anonymously validate your habits, thoughts, and behaviors through community feedback."
+        keywords={['about is this normal', 'anonymous validation', 'community feedback', 'behavior validation', 'anonymous platform', 'social validation']}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "AboutPage",
+          "name": "About Is This Normal?",
+          "description": "A platform for anonymous validation of behaviors and situations"
+        }}
+      />
       <h1>About "Is This Normal?"</h1>
       <p className="my-1">
         "Is This Normal?" is a platform where people can anonymously ask if their habits, 

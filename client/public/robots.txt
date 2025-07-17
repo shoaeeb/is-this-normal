@@ -1,5 +1,6 @@
+# Allow all web crawlers
 User-agent: *
 Allow: /
 
-# Sitemap
+# Sitemap location
 Sitemap: https://is-this-normal.onrender.com/sitemap.xml

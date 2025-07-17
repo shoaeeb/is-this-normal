@@ -4,13 +4,15 @@ This document explains how to optimize SEO and track user analytics for the "Is 
 
 ## SEO Implementation
 
-### 1. React Helmet
-The application uses `react-helmet-async` to manage document head tags for SEO:
-- Title tags
-- Meta descriptions
-- Open Graph tags for social sharing
-- Twitter Card tags
-- Canonical URLs
+### 1. Enhanced Meta Tags
+The application uses `react-helmet-async` through the `SEOTags` component to manage document head tags for SEO:
+- Title tags optimized with keywords
+- Detailed meta descriptions with call-to-actions
+- Keywords meta tag with relevant terms
+- Open Graph tags for Facebook sharing
+- Twitter Card tags for Twitter sharing
+- Canonical URLs to prevent duplicate content
+- Structured data (JSON-LD) for rich search results
 
 ### 2. Sitemap Generation
 A sitemap is dynamically generated and available at `/sitemap.xml`. It includes:
@@ -40,6 +42,20 @@ The application uses SEO-friendly URLs:
 - Question URLs include the question text as a slug
 - Category pages have descriptive URLs
 - No query parameters in public-facing URLs
+
+### 5. Structured Data
+The application implements structured data (JSON-LD) for rich search results:
+- QAPage schema for question pages
+- WebSite schema for the homepage
+- AboutPage schema for the about page
+
+### 6. Keyword Optimization
+Each page is optimized with relevant keywords:
+- Primary keywords: "is this normal", "normal behavior", "anonymous questions"
+- Secondary keywords based on categories: relationships, work, health, etc.
+- Long-tail keywords based on question content
+
+See [SEO_KEYWORDS.md](./docs/SEO_KEYWORDS.md) for the complete keyword strategy.
 
 ## Analytics Implementation
 

@@ -4,7 +4,7 @@ import QuestionItem from '../questions/QuestionItem';
 import CategoryFilter from '../questions/CategoryFilter';
 import SearchExample from '../search/SearchExample';
 import Pagination from '../layout/Pagination';
-import SEO from '../layout/SEO';
+import SEOTags from '../layout/SEOTags';
 
 const Home = () => {
   const [questions, setQuestions] = useState([]);
@@ -47,10 +47,22 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      <SEO 
+      <SEOTags 
         title="Home" 
-        description="Ask and answer questions about what behaviors and situations are normal. Get anonymous validation from the community."
-        canonicalUrl={window.location.href}
+        description="Ask and answer questions about what behaviors and situations are normal. Get anonymous validation from the community without judgment."
+        keywords={['anonymous questions', 'normal behavior', 'community feedback', 'social validation', 'anonymous advice']}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Is This Normal?",
+          "url": window.location.href,
+          "description": "Anonymous platform to validate your habits, thoughts, and behaviors",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": `${window.location.origin}/search/{search_term_string}`,
+            "query-input": "required name=search_term_string"
+          }
+        }}
       />
       <div className="intro-section">
         <h1 className="text-center">Is This Normal?</h1>

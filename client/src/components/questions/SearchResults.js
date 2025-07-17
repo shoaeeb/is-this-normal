@@ -4,7 +4,7 @@ import api from '../../utils/api';
 import QuestionItem from './QuestionItem';
 import Pagination from '../layout/Pagination';
 import { trackEvent } from '../../utils/analytics';
-import SEO from '../layout/SEO';
+import SEOTags from '../layout/SEOTags';
 
 const SearchResults = () => {
   const { query } = useParams();
@@ -42,10 +42,11 @@ const SearchResults = () => {
 
   return (
     <div className="search-results">
-      <SEO 
+      <SEOTags 
         title={`Search Results for "${query}"`}
-        description={`Search results for "${query}" - Find out if your behaviors and situations are normal.`}
+        description={`Search results for "${query}" - Find out if your behaviors and situations are normal. Get anonymous feedback from the community.`}
         canonicalUrl={window.location.href}
+        keywords={['is this normal', query, 'normal behavior', 'search results', 'anonymous questions']}
       />
       <Link to="/" className="btn btn-light">
         Back to All Questions

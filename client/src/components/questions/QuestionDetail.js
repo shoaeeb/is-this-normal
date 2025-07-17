@@ -4,7 +4,7 @@ import api from '../../utils/api';
 import { v4 as uuidv4 } from 'uuid';
 import CommentSection from '../comments/CommentSection';
 import ShareButtons from '../layout/ShareButtons';
-import SEO from '../layout/SEO';
+import SEOTags from '../layout/SEOTags';
 import { trackEvent } from '../../utils/analytics';
 
 const QuestionDetail = () => {
@@ -88,11 +88,31 @@ const QuestionDetail = () => {
 
   return (
     <div className="question-detail">
-      <SEO 
+      <SEOTags 
         title={question.text}
-        description={`${question.normalPercentage}% of people think this is normal. Join the discussion and vote!`}
+        description={`${question.normalPercentage}% of people think this is normal. Join the discussion and vote on whether this behavior is normal!`}
         canonicalUrl={window.location.href}
         ogType="article"
+        keywords={['is this normal', question.category, 'normal behavior', 'social validation', question.text.toLowerCase().replace(/is it normal to /i, '').split(' ').slice(0, 5).join(' ')]}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "QAPage",
+          "mainEntity": {
+            "@type": "Question",
+            "name": question.text,
+            "text": question.text,
+            "answerCount": question.totalVotes,
+            "dateCreated": question.createdAt,
+            "author": { "@type": "Person", "name": "Anonymous" },
+            "suggestedAnswer": {
+              "@type": "Answer",
+              "text": `${question.normalPercentage}% of ${question.totalVotes} people think this is normal.`,
+              "dateCreated": question.updatedAt || question.createdAt,
+              "upvoteCount": question.normalVotes,
+              "url": window.location.href
+            }
+          }
+        }}
       />
       <Link to="/" className="btn btn-light">
         Back to Questions

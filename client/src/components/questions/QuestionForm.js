@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../utils/api';
+import SEOTags from '../layout/SEOTags';
 
 const QuestionForm = () => {
   const [formData, setFormData] = useState({
@@ -78,6 +79,11 @@ const QuestionForm = () => {
 
   return (
     <div className="question-form-container">
+      <SEOTags 
+        title="Ask a Question"
+        description="Submit your question anonymously and find out if others think your behaviors or situations are normal. Get validation from the community without judgment."
+        keywords={['submit question', 'ask anonymously', 'is this normal', 'behavior validation', 'anonymous confession', 'community feedback']}
+      />
       <h1>Ask a Question</h1>
       <p className="lead">
         Submit your question anonymously and find out if others think it's normal.
