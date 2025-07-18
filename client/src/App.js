@@ -12,6 +12,7 @@ import CategoryQuestions from './components/questions/CategoryQuestions';
 import SearchResults from './components/questions/SearchResults';
 import MyQuestions from './components/questions/MyQuestions';
 import About from './components/pages/About';
+import Sitemap from './components/pages/Sitemap';
 import NotFound from './components/pages/NotFound';
 
 // Google Analytics tracking ID from environment variable
@@ -31,7 +32,10 @@ const AnalyticsTracker = () => {
 const App = () => {
   // Initialize Google Analytics
   useEffect(() => {
+    console.log('Initializing GA with tracking ID:', GA_TRACKING_ID);
     initGA(GA_TRACKING_ID);
+    // Send an initial pageview
+    trackPageView(window.location.pathname + window.location.search);
   }, []);
   return (
     <HelmetProvider>
@@ -49,6 +53,7 @@ const App = () => {
             <Route path="/search/:query" element={<SearchResults />} />
             <Route path="/about" element={<About />} />
             <Route path="/my-questions" element={<MyQuestions />} />
+            <Route path="/sitemap" element={<Sitemap />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           </div>

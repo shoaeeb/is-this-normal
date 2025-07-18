@@ -50,6 +50,9 @@ const Navbar = () => {
           <li>
             <Link to="/about">About</Link>
           </li>
+          <li>
+            <Link to="/sitemap">Sitemap</Link>
+          </li>
         </ul>
         <ThemeToggle />
       </div>
