@@ -1,5 +1,6 @@
 # Allow all web crawlers
 User-agent: *
+Disallow:
 Allow: /
 
 # Sitemap locations

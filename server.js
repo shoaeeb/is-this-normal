@@ -32,6 +32,15 @@ app.use(helmet({
   }
 }));
 
+// Disable helmet for robots.txt and sitemap files
+app.use((req, res, next) => {
+  if (req.path === '/robots.txt' || req.path.endsWith('sitemap.xml')) {
+    helmet.contentSecurityPolicy()(req, res, next);
+  } else {
+    next();
+  }
+});
+
 // Log all requests
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
@@ -46,6 +55,12 @@ app.use('/api/comments', require('./routes/comments'));
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'Server is running' });
+});
+
+// Explicitly serve robots.txt
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain');
+  res.sendFile(path.join(__dirname, 'client', process.env.NODE_ENV === 'production' ? 'build' : 'public', 'robots.txt'));
 });
 
 // Dynamic sitemap endpoint with caching
